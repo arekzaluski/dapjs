@@ -1931,21 +1931,12 @@ class CMSISDAP {
             return buf.subarray(2, buf[1] + 2 - 1); // .toString("utf8")
         });
     }
-    delay(time) {
-        return new Promise(resolve => {
-            setTimeout(resolve.bind(null, null), time);
-        });
-    }
     send(command) {
         return __awaiter(this, void 0, void 0, function* () {
             const array = Uint8Array.from(command);
             yield this.hid.write(array.buffer);
-            // wait 1 ms before reading data
-            return this.delay(1).then(() => __awaiter(this, void 0, void 0, function* () {
-                const response = yield this.hid.read();
-                const arr = new Uint8Array(response.buffer);
-                return arr;
-            }));
+            const response = yield this.hid.read();
+            return new Uint8Array(response.buffer);
         });
     }
 }
